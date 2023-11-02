@@ -259,6 +259,9 @@ bool Application::DispatchAndDelete(Application::Event* event) {
   // events because there may already be other lifecycle events in the queue.
 
   SbTimeMonotonic timestamp = scoped_event->event->timestamp;
+  SB_DLOG(INFO) << "conceal: asking for going to state "
+                << scoped_event->event->type;
+
   switch (scoped_event->event->type) {
     case kSbEventTypePreload:
       if (state() != kStateUnstarted) {
@@ -298,6 +301,8 @@ bool Application::DispatchAndDelete(Application::Event* event) {
       }
       break;
     case kSbEventTypeConceal:
+      // logging.debug('conceal: current state is %d', state())
+      SB_DLOG(INFO) << "conceal: current state is " << state();
       switch (state()) {
         case kStateUnstarted:
           return true;
