@@ -43,8 +43,8 @@
 #include "third_party/skia/include/gpu/GrContextOptions.h"
 #include "third_party/skia/include/gpu/GrDirectContext.h"
 #include "third_party/skia/include/gpu/gl/GrGLInterface.h"
-#include "third_party/skia/src/gpu/GrRenderTarget.h"
-#include "third_party/skia/src/gpu/GrResourceProvider.h"
+#include "third_party/skia/src/gpu/ganesh/GrRenderTarget.h"
+#include "third_party/skia/src/gpu/ganesh/GrResourceProvider.h"
 
 namespace {
 // Some clients call Submit() multiple times with up to 2 different render

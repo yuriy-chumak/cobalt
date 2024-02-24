@@ -263,8 +263,10 @@
 
 #if defined(SK_BUILD_FOR_GOOGLE3)
     void SkDebugfForDumpStackTrace(const char* data, void* unused);
-    void DumpStackTrace(int skip_count, void w(const char*, void*), void* arg);
-#  define SK_DUMP_GOOGLE3_STACK() DumpStackTrace(0, SkDebugfForDumpStackTrace, nullptr)
+    namespace base {
+        void DumpStackTrace(int skip_count, void w(const char*, void*), void* arg);
+    }
+#  define SK_DUMP_GOOGLE3_STACK() ::base::DumpStackTrace(0, SkDebugfForDumpStackTrace, nullptr)
 #else
 #  define SK_DUMP_GOOGLE3_STACK()
 #endif
@@ -405,8 +407,10 @@
 #  define GR_TEST_UTILS 0
 #endif
 
-#ifndef SK_GPU_V1
-#  define SK_GPU_V1 1
+#if !SK_SUPPORT_GPU
+   #define SK_GPU_V1 0 // always false if Ganesh is disabled
+#elif !defined(SK_GPU_V1)
+#  define SK_GPU_V1 1   // otherwise default to v1 enabled
 #endif
 
 #if defined(SK_HISTOGRAM_ENUMERATION)  || \
@@ -488,7 +492,11 @@
                                       }() )
 #endif // SK_BUILD_FOR_WIN
     #define SkDEBUGFAIL(message)        SK_ABORT("%s", message)
+#ifdef SK_BUILD_FOR_WIN
+    #define SkDEBUGFAILF(...)           SK_ABORT("%s", ##__VA_ARGS__)
+#else
     #define SkDEBUGFAILF(fmt, ...)      SK_ABORT(fmt, ##__VA_ARGS__)
+#endif // SK_BUILD_FOR_WIN
     #define SkDEBUGCODE(...)            __VA_ARGS__
     #define SkDEBUGF(...)               SkDebugf(__VA_ARGS__)
     #define SkAssertResult(cond)        SkASSERT(cond)

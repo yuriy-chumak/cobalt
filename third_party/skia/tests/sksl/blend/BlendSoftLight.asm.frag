@@ -208,7 +208,7 @@ OpDecorate %240 RelaxedPrecision
 %11 = OpVariable %_ptr_Uniform__UniformBuffer Uniform
 %v2float = OpTypeVector %float 2
 %_ptr_Function_v2float = OpTypePointer Function %v2float
-%15 = OpTypeFunction %float %_ptr_Function_v2float %_ptr_Function_v2float
+%16 = OpTypeFunction %float %_ptr_Function_v2float %_ptr_Function_v2float
 %float_2 = OpConstant %float 2
 %float_1 = OpConstant %float 1
 %float_4 = OpConstant %float 4
@@ -225,7 +225,7 @@ OpDecorate %240 RelaxedPrecision
 %float_0 = OpConstant %float 0
 %_ptr_Function_v4float = OpTypePointer Function %v4float
 %int_0 = OpConstant %int 0
-%soft_light_component_Qhh2h2 = OpFunction %float None %15
+%soft_light_component_Qhh2h2 = OpFunction %float None %16
 %17 = OpFunctionParameter %_ptr_Function_v2float
 %18 = OpFunctionParameter %_ptr_Function_v2float
 %19 = OpLabel
@@ -266,13 +266,13 @@ OpBranchConditional %26 %27 %28
 %52 = OpFAdd %float %44 %51
 %53 = OpLoad %v2float %18
 %54 = OpCompositeExtract %float %53 0
-%56 = OpLoad %v2float %17
-%57 = OpCompositeExtract %float %56 1
-%55 = OpFNegate %float %57
+%55 = OpLoad %v2float %17
+%56 = OpCompositeExtract %float %55 1
+%57 = OpFNegate %float %56
 %58 = OpLoad %v2float %17
 %59 = OpCompositeExtract %float %58 0
 %60 = OpFMul %float %float_2 %59
-%61 = OpFAdd %float %55 %60
+%61 = OpFAdd %float %57 %60
 %62 = OpFAdd %float %61 %float_1
 %63 = OpFMul %float %54 %62
 %64 = OpFAdd %float %52 %63

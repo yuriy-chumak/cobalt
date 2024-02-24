@@ -28,10 +28,10 @@
 #include "include/core/SkTypes.h"
 #include "include/private/SkDeque.h"
 #include "include/private/SkMacros.h"
-#include "include/private/SkTOptional.h"
 
 #include <cstring>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #ifndef SK_SUPPORT_LEGACY_GETTOTALMATRIX
@@ -65,6 +65,9 @@ class SkSurface;
 class SkSurface_Base;
 class SkTextBlob;
 class SkVertices;
+
+namespace skgpu::graphite { class Recorder; }
+namespace SkRecords { class Draw; }
 
 /** \class SkCanvas
     SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
@@ -296,6 +299,12 @@ public:
         example: https://fiddle.skia.org/c/@Canvas_recordingContext
      */
     virtual GrRecordingContext* recordingContext();
+
+    /** Returns Recorder for the GPU surface associated with SkCanvas.
+
+        @return  Recorder, if available; nullptr otherwise
+     */
+    virtual skgpu::graphite::Recorder* recorder();
 
 #ifdef STARBOARD
     /**
@@ -1445,6 +1454,7 @@ public:
         SrcRectConstraint controls the behavior at the edge of source SkRect,
         provided to drawImageRect() when there is any filtering. If kStrict is set,
         then extra code is used to ensure it nevers samples outside of the src-rect.
+        kStrict_SrcRectConstraint disables the use of mipmaps.
     */
     enum SrcRectConstraint {
         kStrict_SrcRectConstraint, //!< sample only inside bounds; slower
@@ -2272,12 +2282,12 @@ protected:
 #if SK_SUPPORT_GPU
     /** Experimental
      */
-    virtual sk_sp<GrSlug> doConvertBlobToSlug(
-            const SkTextBlob& blob, SkPoint origin, const SkPaint& paint);
+    virtual sk_sp<GrSlug> onConvertGlyphRunListToSlug(
+            const SkGlyphRunList& glyphRunList, const SkPaint& paint);
 
     /** Experimental
      */
-    virtual void doDrawSlug(GrSlug* slug);
+    virtual void onDrawSlug(const GrSlug* slug);
 #endif
 
 private:
@@ -2361,10 +2371,6 @@ private:
         void reset(SkBaseDevice* device);
     };
 
-    SkDeque     fMCStack;
-    // points to top of stack
-    MCRec*      fMCRec;
-
     // the first N recs that can fit here mean we won't call malloc
 #if defined(STARBOARD)
     // Cobalt uses various compilers, set a safe larger size.
@@ -2375,6 +2381,10 @@ private:
     static constexpr int kMCRecCount     = 32; // common depth for save/restores
 
     intptr_t fMCRecStorage[kMCRecSize * kMCRecCount / sizeof(intptr_t)];
+
+    SkDeque     fMCStack;
+    // points to top of stack
+    MCRec*      fMCRec;
 
     // Installed via init()
     sk_sp<SkBaseDevice> fBaseDevice;
@@ -2408,6 +2418,10 @@ private:
     friend class SkPictureRecord;   // predrawNotify (why does it need it? <reed>)
     friend class SkOverdrawCanvas;
     friend class SkRasterHandleAllocator;
+    friend class SkRecords::Draw;
+    template <typename Key>
+    friend class SkTestCanvas;
+
 protected:
     // For use by SkNoDrawCanvas (via SkCanvasVirtualEnforcer, which can't be a friend)
     SkCanvas(const SkIRect& bounds);
@@ -2430,7 +2444,7 @@ private:
     /** Experimental
      * Draw an GrSlug given the current canvas state.
      */
-    void drawSlug(GrSlug* slug);
+    void drawSlug(const GrSlug* slug);
 #endif
 
     /** Experimental

@@ -208,6 +208,11 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
         }
         if (!blitter) {
             switch (dst.colorType()) {
+/* Cobalt
+                case kN32_SkColorType:
+                    blitter = SkSpriteBlitter::ChooseL32(source, paint, alloc);
+                    break;
+Cobalt */
                 case kRGB_565_SkColorType:
                     blitter = SkSpriteBlitter::ChooseL565(source, paint, alloc);
                     break;

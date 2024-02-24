@@ -18,7 +18,7 @@
 #include "cobalt/render_tree/image.h"
 #include "cobalt/renderer/egl_and_gles.h"
 #include "third_party/skia/include/gpu/GrTypes.h"
-#include "third_party/skia/include/private/GrTypesPriv.h"
+#include "third_party/skia/include/private/gpu/ganesh/GrTypesPriv.h"
 
 namespace cobalt {
 namespace renderer {

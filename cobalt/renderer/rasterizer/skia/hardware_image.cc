@@ -31,7 +31,7 @@
 #include "third_party/skia/include/core/SkPixelRef.h"
 #include "third_party/skia/include/gpu/GrBackendSurface.h"
 #include "third_party/skia/include/gpu/gl/GrGLTypes.h"
-#include "third_party/skia/src/gpu/GrResourceProvider.h"
+#include "third_party/skia/src/gpu/ganesh/GrResourceProvider.h"
 
 namespace cobalt {
 namespace renderer {
