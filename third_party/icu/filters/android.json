@@ -9,7 +9,7 @@
 // Includes the items from GENRB_ALIAS_SOURCE and GENRB_SOURCE
   "localeFilter": {
     "filterType": "language",
-    "whitelist": [
+    "includelist": [
 // Need to explicitly add "root"
       "root",
 
@@ -130,13 +130,13 @@
   },
   "featureFilters": {
     "brkitr_dictionaries": {
-      "blacklist": [
+      "excludelist": [
 // Filtered by android/brkitr.patch        "cjdict",
         "cjdict"
       ]
     },
     "brkitr_rules": {
-      "blacklist": [
+      "excludelist": [
 // Exclude line_cj till we upgrade to 68.1 due to size impact.
 	"line_cj",
         "title",
@@ -144,14 +144,14 @@
       ]
     },
     "brkitr_tree": {
-      "blacklist": [
+      "excludelist": [
         "en_US_POSIX"
       ]
     },
 // Based on the ICU63 version of
 // https://cs.chromium.org/chromium/src/third_party/icu/source/data/mappings/ucmlocal.mk?rcl=797b7c
     "conversion_mappings": {
-      "whitelist": [
+      "includelist": [
 // UCM_SOURCE_CORE=...
         "iso-8859-2-html",
         "iso-8859-3-html",
@@ -196,7 +196,7 @@
 // "my", "ne", "pa", "si", "sq", "ur", "uz", "zu"
     "curr_tree": {
       "filterType": "language",
-      "whitelist": [
+      "includelist": [
 // Need to explicitly add "root"
 	"root",
 
@@ -288,14 +288,14 @@
       "filterType": "union",
       "unionOf": [
         {
-          "whitelist": [
+          "includelist": [
             "en",
             "en_US"
           ]
         },
         {
           "filterType": "language",
-          "whitelist": [
+          "includelist": [
 // Need to explicitly add "root"
     	    "root",
 
@@ -378,7 +378,7 @@
       ]
     },
     "rbnf_tree": {
-      "whitelist": [
+      "includelist": [
 // Needed by "y=jpanyear" in locales/ja.txt for calendar="japanese"
         "ja",
 // Needed by "d=hanidays" in locales/zh*.txt for calendar="chinese"
@@ -390,7 +390,7 @@
 // Includes the items from REGION_ALIAS_SOURCE and REGION_SOURCE
     "region_tree": {
       "filterType": "language",
-      "whitelist": [
+      "includelist": [
 // Need to explicitly add "root"
 	"root",
 
@@ -484,7 +484,7 @@
 // "my", "ne", "pa", "si", "sq", "ur", "uz", "zu"
     "unit_tree": {
       "filterType": "language",
-      "whitelist": [
+      "includelist": [
 // Need to explicitly add "root"
 	"root",
 
@@ -574,7 +574,7 @@
 // "my", "ne", "pa", "si", "sq", "ur", "uz", "zu"
     "zone_tree": {
       "filterType": "language",
-      "whitelist": [
+      "includelist": [
 // Need to explicitly add "root"
 	"root",
 // Need to explicitly add "tzdbNames"
@@ -854,23 +854,6 @@
         "-/*/202"
       ]
     },
-// Based on remove_legacy_chinese_codepoint_collation
-// # big5han and gb2312han collation do not make any sense and nobody uses them.
-    {
-      "categories": [
-        "coll_tree"
-      ],
-      "files": {
-        "whitelist": [
-	  "zh"
-	]
-      },
-      "rules": [
-        "-/*/unihan",
-        "-/*/big5han",
-        "-/*/gb2312han"
-      ]
-    },
 // Based on https://cs.chromium.org/chromium/src/third_party/icu/patches/data.build.patch?rcl=797b7c
 // +# Chromium : To save space, use '-R' option (exclude collation rules. just
 // +# include the compiled binary data.)
@@ -884,6 +867,24 @@
 	"-/collations/*/Sequence"
       ]
     },
+// The following rules must be placed below "-/collations/*/Sequence" to avoid keeping empty unihan, big5han and gb2312han
+// Based on remove_legacy_chinese_codepoint_collation
+// # big5han and gb2312han collation do not make any sense and nobody uses them.
+    {
+      "categories": [
+        "coll_tree"
+      ],
+      "files": {
+        "includelist": [
+	  "zh"
+	]
+      },
+      "rules": [
+        "-/*/unihan",
+        "-/*/big5han",
+        "-/*/gb2312han"
+      ]
+    },
 // Based on filter_unit_data
 // # Keep only duration and compound in units* sections.
     {
@@ -895,56 +896,153 @@
         "-/unitsNarrow",
         "-/unitsShort",
         "+/*/*/acre",
+        "-/*/*/acre/case",
+        "-/*/*/acre/gender",
         "+/*/*/bit",
+        "-/*/*/bit/case",
+        "-/*/*/bit/gender",
         "+/*/*/byte",
+        "-/*/*/byte/case",
+        "-/*/*/byte/gender",
         "+/*/*/celsius",
+        "-/*/*/celsius/case",
+        "-/*/*/celsius/gender",
         "+/*/*/centimeter",
+        "-/*/*/centimeter/case",
+        "-/*/*/centimeter/gender",
         "+/*/*/day",
+        "-/*/*/day/case",
+        "-/*/*/day/gender",
         "+/*/*/degree",
+        "-/*/*/degree/case",
+        "-/*/*/degree/gender",
         "+/*/*/fahrenheit",
+        "-/*/*/fahrenheit/case",
+        "-/*/*/fahrenheit/gender",
         "+/*/*/fluid-ounce",
+        "-/*/*/fluid-ounce/case",
+        "-/*/*/fluid-ounce/gender",
         "+/*/*/foot",
+        "-/*/*/foot/case",
+        "-/*/*/foot/gender",
         "+/*/*/gallon",
+        "-/*/*/gallon/case",
+        "-/*/*/gallon/gender",
         "+/*/*/gigabit",
+        "-/*/*/gigabit/case",
+        "-/*/*/gigabit/gender",
         "+/*/*/gigabyte",
+        "-/*/*/gigabyte/case",
+        "-/*/*/gigabyte/gender",
         "+/*/*/gram",
+        "-/*/*/gram/case",
+        "-/*/*/gram/gender",
         "+/*/*/hectare",
+        "-/*/*/hectare/case",
+        "-/*/*/hectare/gender",
         "+/*/*/hour",
+        "-/*/*/hour/case",
+        "-/*/*/hour/gender",
         "+/*/*/inch",
+        "-/*/*/inch/case",
+        "-/*/*/inch/gender",
         "+/*/*/kilobit",
+        "-/*/*/kilobit/case",
+        "-/*/*/kilobit/gender",
         "+/*/*/kilobyte",
+        "-/*/*/kilobyte/case",
+        "-/*/*/kilobyte/gender",
         "+/*/*/kilogram",
+        "-/*/*/kilogram/case",
+        "-/*/*/kilogram/gender",
         "+/*/*/kilometer",
+        "-/*/*/kilometer/case",
+        "-/*/*/kilometer/gender",
         "+/*/*/liter",
+        "-/*/*/liter/case",
+        "-/*/*/liter/gender",
         "+/*/*/megabit",
+        "-/*/*/megabit/case",
+        "-/*/*/megabit/gender",
         "+/*/*/megabyte",
+        "-/*/*/megabyte/case",
+        "-/*/*/megabyte/gender",
         "+/*/*/meter",
+        "-/*/*/meter/case",
+        "-/*/*/meter/gender",
         "+/*/*/mile",
+        "-/*/*/mile/case",
+        "-/*/*/mile/gender",
         "+/*/*/mile-scandinavian",
+        "-/*/*/mile-scandinavian/case",
+        "-/*/*/mile-scandinavian/gender",
         "+/*/*/millimeter",
+        "-/*/*/millimeter/case",
+        "-/*/*/millimeter/gender",
         "+/*/*/milliliter",
+        "-/*/*/milliliter/case",
+        "-/*/*/milliliter/gender",
         "+/*/*/millisecond",
+        "-/*/*/millisecond/case",
+        "-/*/*/millisecond/gender",
         "+/*/*/minute",
+        "-/*/*/minute/case",
+        "-/*/*/minute/gender",
         "+/*/*/month",
+        "-/*/*/month/case",
+        "-/*/*/month/gender",
         "+/*/*/ounce",
+        "-/*/*/ounce/case",
+        "-/*/*/ounce/gender",
         "+/*/*/percent",
+        "-/*/*/percent/case",
+        "-/*/*/percent/gender",
         "+/*/*/petabyte",
+        "-/*/*/petabyte/case",
+        "-/*/*/petabyte/gender",
         "+/*/*/pound",
+        "-/*/*/pound/case",
+        "-/*/*/pound/gender",
         "+/*/*/second",
+        "-/*/*/second/case",
+        "-/*/*/second/gender",
         "+/*/*/stone",
+        "-/*/*/stone/case",
+        "-/*/*/stone/gender",
         "+/*/*/terabit",
+        "-/*/*/terabit/case",
+        "-/*/*/terabit/gender",
         "+/*/*/terabyte",
+        "-/*/*/terabyte/case",
+        "-/*/*/terabyte/gender",
         "+/*/*/week",
+        "-/*/*/week/case",
+        "-/*/*/week/gender",
         "+/*/*/yard",
+        "-/*/*/yard/case",
+        "-/*/*/yard/gender",
         "+/*/*/year",
+        "-/*/*/year/case",
+        "-/*/*/year/gender",
         "+/*/*/kilometer-per-hour",
+        "-/*/*/kilometer-per-hour/case",
+        "-/*/*/kilometer-per-hour/gender",
         "+/*/*/meter-per-second",
+        "-/*/*/meter-per-second/case",
+        "-/*/*/meter-per-second/gender",
         "+/*/*/mile-per-hour",
+        "-/*/*/mile-per-hour/case",
+        "-/*/*/mile-per-hour/gender",
         "+/*/*/liter-per-kilometer",
+        "-/*/*/liter-per-kilometer/case",
+        "-/*/*/liter-per-kilometer/gender",
         "+/*/*/mile-per-gallon",
-        "+/*/compound"
+        "-/*/*/mile-per-gallon/case",
+        "-/*/*/mile-per-gallon/gender",
+        "+/*/compound/per"
       ]
     },
+
 // # Remove exemplar cities in timezone data.
     {
       "categories": [
@@ -1391,7 +1489,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "th"
 	]
       },
@@ -1408,7 +1506,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "zh"
 	]
       },
@@ -1425,7 +1523,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "ko"
 	]
       },
@@ -1442,7 +1540,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "am"
 	]
       },
@@ -1460,7 +1558,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "he"
 	]
       },
@@ -1477,7 +1575,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "ar"
 	]
       },
@@ -1497,7 +1595,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "fa"
 	]
       },
@@ -1515,7 +1613,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "ja"
 	]
       },
@@ -1532,7 +1630,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 //     # When adding other Indian locales for Android,
 //     # add 'indian' calendar to them as well.
 	  "hi"
@@ -1551,7 +1649,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "zh_Hant"
 	]
       },
@@ -1568,7 +1666,7 @@
         "locales_tree"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
 	  "root"
 	]
       },
@@ -1605,7 +1703,7 @@
         "locales_tree"
       ],
       "files": {
-        "blacklist": [
+        "excludelist": [
 	  "root",
 
           "am",
@@ -1635,7 +1733,7 @@
       ],
       "files": {
         "filterType": "language",
-        "whitelist": [
+        "includelist": [
 // Created by diff scripts/chrome_ui_languages.list scripts/accept_lang.list|egrep "^>"|egrep -v "#"|cut -c3-10
           "ach",
           "ak",
@@ -1684,7 +1782,6 @@
           "mi",
           "mt",
           "nn",
-          "no",
           "nso",
           "ny",
           "nyn",
@@ -1724,6 +1821,7 @@
       "rules": [
         "-/*",
         "+/%%ALIAS",
+        "+/%%Parent",
         "+/LocaleScript",
         "+/layout",
         "+/Version"
@@ -1745,8 +1843,8 @@
         "-/Languages",
         "-/Languages%long",
         "-/Languages%short",
+        "-/Languages%menu",
         "-/Languages%variant",
-        "-/LanguagesShort",
         "-/Scripts",
         "-/Scripts%long",
         "-/Scripts%short",
@@ -1772,7 +1870,8 @@
         "+/Scripts%long/Hant",
         "+/Scripts%short/Hant",
         "+/Scripts%variant/Hant",
-        "+/Scripts%stand-alone/Hant"
+        "+/Scripts%stand-alone/Hant",
+        "+/Types/calendar"
       ]
     },
     {
@@ -1780,7 +1879,21 @@
         "misc"
       ],
       "files": {
-        "whitelist": [
+        "includelist": [
+          "grammaticalFeatures"
+        ]
+      },
+      "rules": [
+        "-/*",
+        "+/grammaticalData/derivations/*/compound/gender/per"
+      ]
+    },
+    {
+      "categories": [
+        "misc"
+      ],
+      "files": {
+        "includelist": [
           "supplementalData"
 	]
       },
