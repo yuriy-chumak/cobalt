@@ -59,15 +59,13 @@ local uLong adler32_combine_ OF((uLong adler1, uLong adler2, z_off64_t len2));
 #  define MOD63(a) a %= BASE
 #endif
 
-#if defined(ADLER32_SIMD_SSSE3)
-#include "adler32_simd.h"
-#include "x86.h"
-#elif defined(ADLER32_SIMD_NEON)
+#include "cpu_features.h"
+#if defined(ADLER32_SIMD_SSSE3) || defined(ADLER32_SIMD_NEON)
 #include "adler32_simd.h"
 #endif
 
 #if defined(STARBOARD)
-#include "arm_features.h"
+#include "cpu_features.h"
 #endif
 
 /* ========================================================================= */
@@ -80,13 +78,13 @@ uLong ZEXPORT adler32_z(adler, buf, len)
     unsigned n;
 
 #if defined(ADLER32_SIMD_SSSE3)
-    if (x86_cpu_enable_ssse3 && buf && len >= 64)
+    if (buf != Z_NULL && len >= 64 && x86_cpu_enable_ssse3)
         return adler32_simd_(adler, buf, len);
 #elif defined(ADLER32_SIMD_NEON)
 #if defined(STARBOARD)
     if (arm_cpu_enable_neon && buf && len >= 64)
 #else
-    if (buf && len >= 64)
+    if (buf != Z_NULL && len >= 64)
 #endif
         return adler32_simd_(adler, buf, len);
 #endif
@@ -116,7 +114,7 @@ uLong ZEXPORT adler32_z(adler, buf, len)
      */
     if (buf == Z_NULL) {
         if (!len) /* Assume user is calling adler32(0, NULL, 0); */
-            x86_check_features();
+            cpu_check_features();
         return 1L;
     }
 #else

@@ -2,7 +2,7 @@
 * Copyright (C) 2020 Intel Corporation
 * For conditions of distribution and use, see copyright notice in zlib.h
 */
-#include "arm_features.h"
+#include "cpu_features.h"
 
 #include <assert.h>
 
