@@ -1,21 +1,28 @@
-FROM python:3-alpine
+FROM python:3.8-alpine as base
+FROM base as builder
+
+COPY requirements.txt /app/
+COPY setup.py /app/
+COPY README.md /app/
+COPY proxy/ /app/proxy/
+WORKDIR /app
+RUN pip install --upgrade pip && \
+    pip install --prefix=/deps .
+
+FROM base
+
 LABEL com.abhinavsingh.name="abhinavsingh/proxy.py" \
-      com.abhinavsingh.description="Lightweight HTTP, HTTPS, WebSockets Proxy Server in a single Python file" \
-#      com.abhinavsingh.build-date="" \
+      com.abhinavsingh.description="⚡⚡⚡ Fast, Lightweight, Pluggable, TLS interception capable proxy server focused on \
+        Network monitoring, controls & Application development, testing, debugging." \
       com.abhinavsingh.url="https://github.com/abhinavsingh/proxy.py" \
       com.abhinavsingh.vcs-url="https://github.com/abhinavsingh/proxy.py" \
-#      com.abhinavsingh.vcs-ref="" \
       com.abhinavsingh.docker.cmd="docker run -it --rm -p 8899:8899 abhinavsingh/proxy.py"
 
-COPY proxy.py /app/
-EXPOSE 8899/tcp
+COPY --from=builder /deps /usr/local
 
-WORKDIR /app
-ENTRYPOINT [ "./proxy.py" ]
-CMD [ "--host=0.0.0.0", \
-      "--port=8899", \
-      "--backlog=100", \
-      "--server-recvbuf-size=8192", \
-      "--client-recvbuf-size=8192", \
-      "--open-file-limit=1024", \
-      "--log-level=INFO" ]
+# Install openssl to enable TLS interception within container
+RUN apk update && apk add openssl
+
+EXPOSE 8899/tcp
+ENTRYPOINT [ "proxy" ]
+CMD [ "--hostname=0.0.0.0" ]

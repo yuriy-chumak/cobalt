@@ -1,23 +1,11 @@
-.coverage
-.dockerignore
-.git
-.gitignore
-.idea
-.project
-.settings
-.pydevproject
+# Ignore everything
+**
 
-__pycache__
-*.pem
-*.pyc
-venv
-cover
-dist
-proxy.py.egg-info
+# Except proxy
+!proxy
+!requirements.txt
+!setup.py
+!README.md
 
-LICENSE
-MANIFEST.in
-README.md
-Makefile
-setup.py
-tests.py
+# Ignore __pycache__ directory
+proxy/__pycache__
