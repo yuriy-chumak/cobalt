@@ -46,6 +46,9 @@ runs:
           cd src
           ninja -C out/${{ matrix.platform }}_${{ matrix.config }} $(echo "${TARGETS}" | tr -d '"')
         shell: bash
+      - name: find out
+        run: find out/${{ matrix.platform }}_${{ matrix.config }} -name *obalt -o -name *apk
+        shell: bash
       - name: Dump sccache stats
         run: sccache -s
         shell: bash
